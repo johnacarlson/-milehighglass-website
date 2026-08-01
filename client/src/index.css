@@ -94,7 +94,11 @@ body {
 }
 
 .mhg-input::placeholder {
-  color: #808080;
+  color: var(--mhg-gold);
+}
+
+textarea.mhg-input::placeholder {
+  color: var(--mhg-gold);
 }
 
 .mhg-input:focus {
@@ -112,6 +116,7 @@ body {
   font-size: 1rem;
   cursor: pointer;
   transition: border-color 0.2s;
+  appearance: none;
 }
 
 .mhg-select:focus {
