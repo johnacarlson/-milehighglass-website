@@ -329,7 +329,7 @@ function QuoteForm({ dark = true }) {
       </div>
 
       <div>
-        <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif" }}>
+        <label className={`${labelClass} textarea-label`} style={{ fontFamily: "Oswald, sans-serif" }}>
           Tell Us About Your Project
         </label>
         <textarea

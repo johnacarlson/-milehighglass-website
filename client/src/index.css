@@ -44,6 +44,10 @@ body {
   font-family: "Oswald", sans-serif;
 }
 
+.textarea-label {
+  color: white !important;
+}
+
 .btn-gold {
   display: inline-flex;
   align-items: center;
