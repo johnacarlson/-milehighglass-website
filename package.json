@@ -1,0 +1,28 @@
+{
+  "name": "mhg-rebuild",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch api/index.js",
+    "build": "echo 'No build step needed'",
+    "start": "node api/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Mile High Glass Denver - Lead Funnel with Full Backend",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.6.1",
+    "helmet": "^8.3.0",
+    "pg": "^8.11.3",
+    "resend": "^2.0.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
