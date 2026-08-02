@@ -936,11 +936,11 @@ export default function Home() {
                 e.currentTarget.style.background = "white";
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <text x="2" y="18" fontSize="16" fontWeight="bold" fill="#EA4335">G</text>
+              <svg width="24" height="18" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="0" y="18" fontSize="16" fontWeight="bold" fill="#EA4335">G</text>
                 <text x="8" y="18" fontSize="16" fontWeight="bold" fill="#4285F4">o</text>
-                <text x="14" y="18" fontSize="16" fontWeight="bold" fill="#FBBC04">o</text>
-                <text x="19" y="18" fontSize="16" fontWeight="bold" fill="#EA4335">g</text>
+                <text x="16" y="18" fontSize="16" fontWeight="bold" fill="#FBBC04">o</text>
+                <text x="24" y="18" fontSize="16" fontWeight="bold" fill="#EA4335">g</text>
               </svg>
               Verified on Google
             </a>
