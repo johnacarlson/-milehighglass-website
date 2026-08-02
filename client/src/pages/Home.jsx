@@ -936,11 +936,9 @@ export default function Home() {
                 e.currentTarget.style.background = "white";
               }}
             >
-              <img
-                src="https://www.gstatic.com/images/branding/googlelogo/1x/googlelogo_color_74x24dp.png"
-                alt="Google"
-                style={{ height: "20px", width: "auto" }}
-              />
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "20px", height: "20px", fontSize: "14px", fontWeight: "bold", color: "#EA4335" }}>
+                G
+              </div>
               Verified on Google
             </a>
           </div>
