@@ -250,7 +250,7 @@ function QuoteForm({ dark = true }) {
       </div>
 
       <div>
-        <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif" }}>
+        <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
           Email Address *
         </label>
         <input
@@ -295,7 +295,7 @@ function QuoteForm({ dark = true }) {
       </div>
 
       <div>
-        <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif" }}>
+        <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
           I'm Interested In *
         </label>
         <div style={{ position: "relative" }}>
