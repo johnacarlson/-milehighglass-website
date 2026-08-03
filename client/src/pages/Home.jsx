@@ -222,7 +222,7 @@ function QuoteForm({ dark = true }) {
     <form onSubmit={handleSubmit} style={{ display: "space", gap: "1rem" }}>
       <div className="form-row-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
         <div>
-          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif" }}>
+          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
             First Name *
           </label>
           <input
@@ -235,7 +235,7 @@ function QuoteForm({ dark = true }) {
           />
         </div>
         <div>
-          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif" }}>
+          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
             Last Name *
           </label>
           <input
@@ -266,7 +266,7 @@ function QuoteForm({ dark = true }) {
 
       <div className="form-row-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
         <div>
-          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif" }}>
+          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
             Phone Number *
           </label>
           <input
@@ -280,7 +280,7 @@ function QuoteForm({ dark = true }) {
           />
         </div>
         <div>
-          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif" }}>
+          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
             Zip Code *
           </label>
           <input
