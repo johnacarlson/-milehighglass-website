@@ -44,6 +44,10 @@ body {
   font-family: "Oswald", sans-serif;
 }
 
+label {
+  color: white !important;
+}
+
 .textarea-label {
   color: white !important;
 }
