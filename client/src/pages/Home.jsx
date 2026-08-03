@@ -172,6 +172,24 @@ function QuoteForm({ dark = true }) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess(false);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          zipCode: "",
+          service: "",
+          message: "",
+        });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
