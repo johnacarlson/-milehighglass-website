@@ -219,7 +219,7 @@ function QuoteForm({ dark = true }) {
     : "block text-xs font-medium uppercase tracking-widest mb-1.5 text-white";
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "space", gap: "1rem" }}>
+    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem", padding: "2rem" }}>
       <div className="form-row-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
         <div>
           <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
