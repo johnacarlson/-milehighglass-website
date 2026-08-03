@@ -215,8 +215,8 @@ function QuoteForm({ dark = true }) {
 
   const inputClass = dark ? "mhg-input" : "mhg-input";
   const labelClass = dark
-    ? "block text-xs font-medium uppercase tracking-widest mb-1.5 text-gray-400"
-    : "block text-xs font-medium uppercase tracking-widest mb-1.5 text-gray-600";
+    ? "block text-xs font-medium uppercase tracking-widest mb-1.5 text-white"
+    : "block text-xs font-medium uppercase tracking-widest mb-1.5 text-white";
 
   return (
     <form onSubmit={handleSubmit} style={{ display: "space", gap: "1rem" }}>
