@@ -400,6 +400,86 @@ function QuoteForm({ dark = true }) {
         ✓ Your info is secure & never shared<br/>
         ✓ We'll call within 24 hours
       </p>
+
+      {success && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0, 0, 0, 0.7)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000,
+        }}>
+          <div style={{
+            background: "white",
+            borderRadius: "0.5rem",
+            padding: "3rem",
+            maxWidth: "500px",
+            textAlign: "center",
+            boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+          }}>
+            <div style={{
+              fontSize: "3rem",
+              marginBottom: "1rem",
+              color: "var(--mhg-gold)",
+            }}>
+              ✓
+            </div>
+            <h2 style={{
+              fontSize: "1.75rem",
+              fontWeight: 700,
+              color: "var(--mhg-charcoal)",
+              marginBottom: "1rem",
+              fontFamily: "Oswald, sans-serif",
+            }}>
+              Thank You!
+            </h2>
+            <p style={{
+              color: "#666",
+              fontSize: "1rem",
+              lineHeight: 1.6,
+              marginBottom: "2rem",
+              fontFamily: "Source Serif 4, serif",
+            }}>
+              We've received your inquiry and will respond within 24 hours with a custom estimate. Our team is excited to help transform your space.
+            </p>
+            <button
+              onClick={() => {
+                setSuccess(false);
+                setFormData({
+                  firstName: "",
+                  lastName: "",
+                  email: "",
+                  phone: "",
+                  zipCode: "",
+                  service: "",
+                  message: "",
+                });
+              }}
+              style={{
+                background: "var(--mhg-gold)",
+                color: "white",
+                border: "none",
+                padding: "0.875rem 2rem",
+                borderRadius: "0.25rem",
+                fontSize: "1rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                fontFamily: "Oswald, sans-serif",
+                transition: "background-color 0.2s",
+              }}
+              onMouseEnter={(e) => e.target.style.background = "#b89a3d"}
+              onMouseLeave={(e) => e.target.style.background = "var(--mhg-gold)"}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </form>
   );
 }
