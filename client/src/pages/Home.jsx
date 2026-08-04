@@ -212,6 +212,12 @@ function QuoteForm({ dark = true }) {
 
       if (response.data.success) {
         setSuccess(true);
+        if (window.fbq) {
+          window.fbq('track', 'Lead', {
+            value: 0.00,
+            currency: 'USD'
+          });
+        }
         setFormData({
           firstName: "",
           lastName: "",
