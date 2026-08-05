@@ -703,9 +703,6 @@ export default function Home() {
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1.5rem" }}>
-                <button onClick={scrollToForm} className="btn-gold" style={{ fontSize: "1rem" }}>
-                  Get My Free Quote
-                </button>
                 <a href="tel:3034559552" className="btn-outline-gold" style={{ fontSize: "1rem", textDecoration: "none" }}>
                   <Phone size={18} /> Call Now
                 </a>
