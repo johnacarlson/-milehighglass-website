@@ -227,7 +227,9 @@ function QuoteForm({ dark = true }) {
           service: "",
           message: "",
         });
-        setTimeout(() => setSuccess(false), 5000);
+        setTimeout(() => {
+          window.location.href = '/thank-you';
+        }, 650);
       }
     } catch (err) {
       setError("Something went wrong. Please call us at (303) 455-9552.");

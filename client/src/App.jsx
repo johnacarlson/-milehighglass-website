@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import Home from './pages/Home'
+import ThankYou from './pages/ThankYou'
 
 export default function App() {
     useEffect(() => {
@@ -8,5 +9,8 @@ export default function App() {
           }
     }, [])
 
-  return <Home />
+    const path = window.location.pathname;
+    const page = path === '/thank-you' ? <ThankYou /> : <Home />
+
+  return page
 }
