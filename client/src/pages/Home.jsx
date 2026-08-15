@@ -704,7 +704,7 @@ export default function Home() {
           >
             Explore
           </span>
-          <ChevronDown size={30} style={{ animation: "bounce-down 1.6s ease-in-out infinite" }} />
+          <ChevronDown size={35} strokeWidth={3} style={{ animation: "bounce-down 1.6s ease-in-out infinite" }} />
         </div>
       </section>
 
