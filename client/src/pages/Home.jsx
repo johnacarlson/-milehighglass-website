@@ -16,7 +16,7 @@ import {
 import axios from 'axios';
 
 const LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663185405705/XWktSgb6MUdpB4asHcYi7A/mhg_logo_cdb20e13.png";
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663185405705/XWktSgb6MUdpB4asHcYi7A/mhg_hero_main-KFbHbqafoY4mdxZJbKhGxy.webp";
+const HERO_IMG = "/hero-denver-boulder.webp";
 const SHOWER_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663185405705/XWktSgb6MUdpB4asHcYi7A/mhg_shower_service-bUjwPRZB4Mi4JoGGa9NBCy.webp";
 const WINDOW_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663185405705/XWktSgb6MUdpB4asHcYi7A/mhg_window_service-baNnQ6x8WwNPud2aYqJKAV.webp";
 const TINT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663185405705/XWktSgb6MUdpB4asHcYi7A/mhg_tint_service-QKW8ysL9LQYaGL3CzjW4f9.webp";
@@ -546,8 +546,8 @@ export default function Home() {
             inset: 0,
             backgroundImage: `url(${HERO_IMG})`,
             backgroundSize: "cover",
-            backgroundPosition: "center right",
-            opacity: 0.55,
+            backgroundPosition: "center",
+            opacity: 0.65,
           }}
         />
         <div
@@ -555,14 +555,14 @@ export default function Home() {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(105deg, rgba(20,18,14,0.92) 0%, rgba(20,18,14,0.75) 45%, rgba(20,18,14,0.35) 100%)",
+              "linear-gradient(105deg, rgba(20,18,14,0.88) 0%, rgba(20,18,14,0.6) 45%, rgba(20,18,14,0.2) 100%)",
           }}
         />
 
         <div className="container" style={{ position: "relative", zIndex: 10, paddingTop: "4rem", paddingBottom: "6rem" }}>
           <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
             <div>
-              <div className="section-label">Serving Denver & Boulder — 40+ Years, 1,000+ Satisfied Clients</div>
+              <div className="section-label">Serving Denver, Boulder & Surrounding Areas — 40+ Years, 1,000+ Satisfied Clients</div>
               <h1
                 style={{
                   fontSize: "3.5rem",
@@ -653,7 +653,9 @@ export default function Home() {
                 style={{
                   borderRadius: "0.125rem",
                   padding: "2rem",
-                  background: "var(--mhg-charcoal-mid)",
+                  background: "rgba(26,23,20,0.82)",
+                  backdropFilter: "blur(6px)",
+                  WebkitBackdropFilter: "blur(6px)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
                 }}
