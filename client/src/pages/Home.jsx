@@ -102,7 +102,7 @@ const services = [
     headline: "Commercial Glass Solutions — Fast Turnaround",
     tagline: "Built to Code. Zero Downtime. Built to Impress.",
     description:
-      "Retail storefronts, office partitions, large-scale glazing projects — we serve Denver businesses of all sizes. Our commercial team works around your schedule, minimizes downtime, and delivers code-compliant results that impress tenants and clients.",
+      "Retail storefronts, office partitions, large-scale glazing projects — we serve businesses of all sizes across the Denver and Boulder area. Our commercial team works around your schedule, minimizes downtime, and delivers code-compliant results that impress tenants and clients.",
     features: [
       "Storefront & entrance glass (fast turnaround)",
       "Office glass partitions (soundproof available)",
@@ -141,7 +141,7 @@ const testimonials = [
 ];
 
 const stats = [
-  { value: "40+", label: "Years Serving Denver" },
+  { value: "40+", label: "Years Serving Colorado" },
   { value: "1,000+", label: "Happy Customers" },
   { value: "100+", label: "Years Combined Experience" },
   { value: "Free", label: "Estimates — Always" },
@@ -156,13 +156,9 @@ const trustBadges = [
 
 function QuoteForm({ dark = true }) {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
-    phone: "",
-    zipCode: "",
     service: "",
-    message: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -177,13 +173,9 @@ function QuoteForm({ dark = true }) {
       const timer = setTimeout(() => {
         setSuccess(false);
         setFormData({
-          firstName: "",
-          lastName: "",
+          name: "",
           email: "",
-          phone: "",
-          zipCode: "",
           service: "",
-          message: "",
         });
       }, 3000);
       return () => clearTimeout(timer);
@@ -197,16 +189,15 @@ function QuoteForm({ dark = true }) {
     setSubmitting(true);
 
     try {
+      const trimmedName = formData.name.trim();
+      const [firstName, ...restName] = trimmedName.split(/\s+/);
       const response = await axios.post(
         "/api/leads/submit",
         {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
+          firstName,
+          lastName: restName.join(" ") || undefined,
           email: formData.email,
-          phone: formData.phone,
-          zipCode: formData.zipCode || undefined,
           service: formData.service || undefined,
-          message: formData.message || undefined,
         }
       );
 
@@ -219,13 +210,9 @@ function QuoteForm({ dark = true }) {
           });
         }
         setFormData({
-          firstName: "",
-          lastName: "",
+          name: "",
           email: "",
-          phone: "",
-          zipCode: "",
           service: "",
-          message: "",
         });
         setTimeout(() => {
           window.location.href = '/thank-you';
@@ -246,33 +233,18 @@ function QuoteForm({ dark = true }) {
 
   return (
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "2rem", padding: "3rem 2.5rem" }}>
-      <div className="form-row-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-        <div>
-          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
-            First Name *
-          </label>
-          <input
-            name="firstName"
-            required
-            value={formData.firstName}
-            onChange={handleChange}
-            placeholder="John"
-            className={inputClass}
-          />
-        </div>
-        <div>
-          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
-            Last Name *
-          </label>
-          <input
-            name="lastName"
-            required
-            value={formData.lastName}
-            onChange={handleChange}
-            placeholder="Smith"
-            className={inputClass}
-          />
-        </div>
+      <div>
+        <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
+          Name *
+        </label>
+        <input
+          name="name"
+          required
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="John Smith"
+          className={inputClass}
+        />
       </div>
 
       <div>
@@ -288,36 +260,6 @@ function QuoteForm({ dark = true }) {
           placeholder="john@email.com"
           className={inputClass}
         />
-      </div>
-
-      <div className="form-row-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-        <div>
-          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
-            Phone Number *
-          </label>
-          <input
-            name="phone"
-            type="tel"
-            required
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="(303) 555-0000"
-            className={inputClass}
-          />
-        </div>
-        <div>
-          <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
-            Zip Code *
-          </label>
-          <input
-            name="zipCode"
-            required
-            value={formData.zipCode}
-            onChange={handleChange}
-            placeholder="80201"
-            className={inputClass}
-          />
-        </div>
       </div>
 
       <div>
@@ -352,21 +294,6 @@ function QuoteForm({ dark = true }) {
             }}
           />
         </div>
-      </div>
-
-      <div>
-        <label className={`${labelClass} textarea-label`} style={{ fontFamily: "Oswald, sans-serif" }}>
-          Tell Us About Your Project
-        </label>
-        <textarea
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          rows={3}
-          placeholder="Briefly describe what you need..."
-          className={inputClass}
-          style={{ resize: "none" }}
-        />
       </div>
 
       {error && (
@@ -424,7 +351,7 @@ function QuoteForm({ dark = true }) {
       >
         ✓ 100% Free Estimate — No Obligation<br/>
         ✓ Your info is secure & never shared<br/>
-        ✓ We'll call within 24 hours
+        ✓ We'll reach out within 24 hours
       </p>
 
       {success && (
@@ -635,7 +562,7 @@ export default function Home() {
         <div className="container" style={{ position: "relative", zIndex: 10, paddingTop: "4rem", paddingBottom: "6rem" }}>
           <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
             <div>
-              <div className="section-label">Denver's Premier Glass Specialists — 40+ Years, 1,000+ Satisfied Clients</div>
+              <div className="section-label">Serving Denver & Boulder — 40+ Years, 1,000+ Satisfied Clients</div>
               <h1
                 style={{
                   fontSize: "3.5rem",
@@ -716,7 +643,7 @@ export default function Home() {
                     fontFamily: "Source Serif 4, serif",
                   }}
                 >
-                  Trusted by 1,000+ Denver homeowners
+                  Trusted by 1,000+ Colorado homeowners
                 </span>
               </div>
             </div>
@@ -998,7 +925,7 @@ export default function Home() {
                 color: "var(--mhg-charcoal)",
               }}
             >
-              REAL REVIEWS FROM REAL DENVERITES
+              REAL REVIEWS FROM REAL COLORADANS
             </h2>
             <a
               href="https://www.google.com/maps/place/Mile+High+Glass+Solutions/@39.7391743,-104.9920929,15z/data=!4m6!3m5!1s0x876b8778f000d87f:0xbece82300637b489!8m2!3d39.7391743!4d-104.9920929!16s%2Fg%2F11b6z8v8qp"

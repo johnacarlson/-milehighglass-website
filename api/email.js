@@ -70,7 +70,7 @@ export async function sendLeadEmail(leadData) {
           </tr>
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666; font-size: 13px;"><strong>Phone</strong></td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 15px;"><a href="tel:${escapeHtml(phone)}" style="color: #c9a84c;">${escapeHtml(phone)}</a></td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 15px;">${phone ? `<a href="tel:${escapeHtml(phone)}" style="color: #c9a84c;">${escapeHtml(phone)}</a>` : 'Not provided'}</td>
           </tr>
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666; font-size: 13px;"><strong>Zip Code</strong></td>

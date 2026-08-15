@@ -17,10 +17,10 @@ const submitLimiter = rateLimit({
 });
 
 const leadSchema = z.object({
-  firstName: z.string().min(1, 'First name required'),
-  lastName: z.string().min(1, 'Last name required'),
+  firstName: z.string().min(1, 'Name required'),
+  lastName: z.string().optional().default(''),
   email: z.string().email('Valid email required'),
-  phone: z.string().min(7, 'Valid phone required'),
+  phone: z.string().optional().default(''),
   zipCode: z.string().optional(),
   service: z.string().optional(),
   message: z.string().optional(),
