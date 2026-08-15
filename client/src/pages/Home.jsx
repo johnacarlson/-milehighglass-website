@@ -40,7 +40,7 @@ const services = [
       "Frameless & semi-frameless options",
       "Stays crystal clear + spot-resistant coating",
       "Mold-resistant, rust-proof hardware",
-      "Lifetime warranty on craftsmanship",
+      "Premium tempered safety glass",
     ],
   },
   {
@@ -57,7 +57,7 @@ const services = [
       "Insulated glass reduces outside noise",
       "Boost home value by $4K-$8K",
       "Built to withstand Colorado weather",
-      "10-year performance guarantee",
+      "Precision-fit professional installation",
     ],
   },
   {
@@ -74,7 +74,7 @@ const services = [
       "Blocks 99% of UV rays (protects furniture & skin)",
       "Daytime privacy without darkness",
       "Reduces glare on screens & surfaces",
-      "10+ year durability guarantee",
+      "Professional-grade film, expertly installed",
     ],
   },
   {
@@ -91,7 +91,7 @@ const services = [
       "Bespoke mirrors & decorative panels",
       "Glass shelving & tabletops",
       "Fast, free estimates",
-      "Precision installation guaranteed",
+      "Precision installation, every time",
     ],
   },
   {
@@ -1106,10 +1106,6 @@ export default function Home() {
               {
                 q: "Do you offer financing?",
                 a: "Yes! We work with several financing partners offering flexible payment plans with competitive rates. Ask about options when we call with your estimate.",
-              },
-              {
-                q: "What's your warranty?",
-                a: "We guarantee all installation craftsmanship for life. Glass products come with manufacturer warranties (typically 5–10 years). Details provided with your estimate.",
               },
             ].map((item, idx) => (
               <div
