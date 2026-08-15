@@ -182,3 +182,8 @@ textarea.mhg-input::placeholder {
   }
 }
 
+
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(12px); opacity: 0.55; }
+}

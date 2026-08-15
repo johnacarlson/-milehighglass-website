@@ -653,9 +653,9 @@ export default function Home() {
                 style={{
                   borderRadius: "0.125rem",
                   padding: "2rem",
-                  background: "rgba(26,23,20,0.82)",
-                  backdropFilter: "blur(6px)",
-                  WebkitBackdropFilter: "blur(6px)",
+                  background: "rgba(26,23,20,0.55)",
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
                 }}
@@ -689,18 +689,22 @@ export default function Home() {
           </div>
         </div>
 
-        <div style={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", color: "#6b7280" }}>
+        <div
+          onClick={() => document.getElementById("what-we-do")?.scrollIntoView({ behavior: "smooth" })}
+          style={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", color: "var(--mhg-gold)", cursor: "pointer", zIndex: 10 }}
+        >
           <span
             style={{
-              fontSize: "0.75rem",
+              fontSize: "0.8rem",
+              fontWeight: "600",
               textTransform: "uppercase",
-              letterSpacing: "0.05em",
+              letterSpacing: "0.12em",
               fontFamily: "Oswald, sans-serif",
             }}
           >
             Explore
           </span>
-          <ChevronDown size={20} style={{ animation: "bounce 2s infinite" }} />
+          <ChevronDown size={30} style={{ animation: "bounce-down 1.6s ease-in-out infinite" }} />
         </div>
       </section>
 
@@ -738,22 +742,19 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section style={{ paddingTop: "5rem", paddingBottom: "7rem", background: "var(--mhg-offwhite)" }}>
+      <section id="what-we-do" style={{ paddingTop: "5rem", paddingBottom: "7rem", background: "var(--mhg-offwhite)" }}>
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "3rem" }} className="reveal">
-            <div className="section-label" style={{ borderLeft: "none", paddingLeft: 0, margin: "0 auto 0.5rem" }}>
-              What We Do
-            </div>
             <h2
               style={{
                 fontSize: "2.25rem",
-                fontWeight: "bold",
+                fontWeight: "800",
                 marginTop: "0.5rem",
                 fontFamily: "Oswald, sans-serif",
                 color: "var(--mhg-charcoal)",
               }}
             >
-              GLASS SOLUTIONS FOR EVERY SPACE
+              WHAT WE CAN DO FOR YOU
             </h2>
             <p
               style={{
@@ -782,12 +783,12 @@ export default function Home() {
                   padding: "0.625rem 1.25rem",
                   borderRadius: "0.125rem",
                   fontSize: "0.875rem",
-                  fontWeight: "600",
+                  fontWeight: "700",
                   fontFamily: "Oswald, sans-serif",
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
                   background: activeService === i ? "var(--mhg-charcoal)" : "transparent",
-                  color: activeService === i ? "var(--mhg-gold)" : "var(--mhg-charcoal)",
+                  color: activeService === i ? "#ffffff" : "#000000",
                   border: `2px solid var(--mhg-charcoal)`,
                   cursor: "pointer",
                   transition: "all 0.2s",
