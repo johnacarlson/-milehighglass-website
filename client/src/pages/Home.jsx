@@ -148,7 +148,7 @@ const stats = [
 ];
 
 const trustBadges = [
-  { icon: <Shield size={20} />, text: "Licensed & Insured" },
+  { icon: <Shield size={20} />, text: "Fully Insured" },
   { icon: <Award size={20} />, text: "40+ Years Experience" },
   { icon: <Clock size={20} />, text: "Fast Free Estimates" },
   { icon: <Users size={20} />, text: "1,000+ Customers Served" },
@@ -1100,8 +1100,8 @@ export default function Home() {
                 a: "Energy-efficient windows typically reduce AC/heating costs by 20–30% annually. We provide a free energy audit and can show you projected savings before you decide.",
               },
               {
-                q: "Are you licensed and insured?",
-                a: "Yes. We're fully licensed in Colorado and carry comprehensive liability and workers' compensation insurance. Verification available upon request.",
+                q: "Are you insured?",
+                a: "Yes. We carry comprehensive liability and workers' compensation insurance. Verification available upon request.",
               },
               {
                 q: "Do you offer financing?",
