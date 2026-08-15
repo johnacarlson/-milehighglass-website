@@ -643,7 +643,7 @@ export default function Home() {
                     fontFamily: "Source Serif 4, serif",
                   }}
                 >
-                  Trusted by 1,000+ Colorado homeowners
+                  Trusted by thousands of Colorado homeowners
                 </span>
               </div>
             </div>
