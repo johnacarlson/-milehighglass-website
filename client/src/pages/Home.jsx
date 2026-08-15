@@ -90,7 +90,7 @@ const services = [
       "Custom glass railings & balustrades",
       "Bespoke mirrors & decorative panels",
       "Glass shelving & tabletops",
-      "Same-day free estimates",
+      "Fast, free estimates",
       "Precision installation guaranteed",
     ],
   },
@@ -150,7 +150,7 @@ const stats = [
 const trustBadges = [
   { icon: <Shield size={20} />, text: "Licensed & Insured" },
   { icon: <Award size={20} />, text: "40+ Years Experience" },
-  { icon: <Clock size={20} />, text: "Same-Day Estimates" },
+  { icon: <Clock size={20} />, text: "Fast Free Estimates" },
   { icon: <Users size={20} />, text: "1,000+ Customers Served" },
 ];
 
@@ -668,7 +668,7 @@ export default function Home() {
                   textAlign: "center",
                 }}
               >
-                ✓ 100% FREE ESTIMATE — NO OBLIGATION — SAME-DAY APPOINTMENTS AVAILABLE
+                ✓ 100% FREE ESTIMATE — NO OBLIGATION — FAST RESPONSE
               </div>
               <p
                 style={{
@@ -709,16 +709,6 @@ export default function Home() {
               </div>
 
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "1.5rem" }}>
-                <div style={{ display: "flex" }}>
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={16}
-                      fill="var(--mhg-gold)"
-                      style={{ color: "var(--mhg-gold)" }}
-                    />
-                  ))}
-                </div>
                 <span
                   style={{
                     fontSize: "0.875rem",
@@ -726,7 +716,7 @@ export default function Home() {
                     fontFamily: "Source Serif 4, serif",
                   }}
                 >
-                  5.0 — Trusted by 1,000+ Denver homeowners
+                  Trusted by 1,000+ Denver homeowners
                 </span>
               </div>
             </div>
