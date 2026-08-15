@@ -31,12 +31,12 @@ const services = [
     label: "Shower Doors",
     icon: <Droplets size={22} />,
     image: SHOWER_IMG,
-    headline: "Frameless Shower Doors — Installed in 5-7 Days",
+    headline: "Custom Frameless Shower Doors",
     tagline: "Transform Your Bathroom Without a Full Remodel",
     description:
       "Crystal clear glass that stays spotless for 5+ years. No mold, no maintenance headaches, no compromise on luxury. We build frameless enclosures with premium hardware that make your bathroom feel like a high-end spa — at a fraction of the cost.",
     features: [
-      "Professional installation in 5-7 days",
+      "Measured in person, installed right",
       "Frameless & semi-frameless options",
       "Stays crystal clear + spot-resistant coating",
       "Mold-resistant, rust-proof hardware",
@@ -48,14 +48,14 @@ const services = [
     label: "Window Replacement",
     icon: <HomeIcon size={22} />,
     image: WINDOW_IMG,
-    headline: "Save ~30% on AC Bills — Energy-Efficient Windows",
-    tagline: "Lower Bills. More Comfort. Higher Home Value.",
+    headline: "Foggy Glass? Replace the Glass — Not the Whole Window",
+    tagline: "We Sell Windows AND Glass. Big Window Companies Only Sell Windows.",
     description:
-      "Colorado's harsh sun costs you money every month. Our professional window installation seals out summer heat and winter drafts — keeping your home comfortable year-round while cutting energy costs by an average of 30%. Plus boost your home value by $4K-$8K.",
+      "When an insulated glass unit's seal fails, your window fogs up — and the big window brands will quote you a whole new window even when your frame is perfectly fine. We do it differently. If your frames are in good shape, we replace just the glass, restore your crystal-clear view, and save you the cost of a full window replacement. And when you truly need new windows, we do that too.",
     features: [
-      "Save ~30% on annual AC/heating bills",
-      "Insulated glass reduces outside noise",
-      "Boost home value by $4K-$8K",
+      "Foggy & failed insulated glass replacement",
+      "Keep your frames — replace only the glass",
+      "Full window replacement when you actually need it",
       "Built to withstand Colorado weather",
       "Precision-fit professional installation",
     ],
@@ -70,7 +70,7 @@ const services = [
     description:
       "Professional window film that rejects solar heat (lower AC costs), blocks 99% of UV rays (protects skin & furniture), and adds daytime privacy — all while keeping your crystal clear view. Zero peeling, zero bubbling, zero hassle.",
     features: [
-      "Rejects solar heat — lower AC costs",
+      "Rejects solar heat — cooler rooms in summer",
       "Blocks 99% of UV rays (protects furniture & skin)",
       "Daytime privacy without darkness",
       "Reduces glare on screens & surfaces",
@@ -102,11 +102,11 @@ const services = [
     headline: "Commercial Glass Solutions — Fast Turnaround",
     tagline: "Built to Code. Zero Downtime. Built to Impress.",
     description:
-      "Retail storefronts, office partitions, large-scale glazing projects — we serve businesses of all sizes across the Denver and Boulder area. Our commercial team works around your schedule, minimizes downtime, and delivers code-compliant results that impress tenants and clients.",
+      "Apartments and multi-family buildings are our specialty — plus retail storefronts, office partitions, and large-scale glazing projects across the Denver and Boulder area. Our commercial team works around your schedule, minimizes downtime, and delivers code-compliant results that impress tenants and clients.",
     features: [
+      "Apartment & multi-family glass replacement",
       "Storefront & entrance glass (fast turnaround)",
       "Office glass partitions (soundproof available)",
-      "Commercial window replacement",
       "Code-compliant safety glass",
       "ADA-compliant installations",
     ],
@@ -149,7 +149,7 @@ const stats = [
 
 const trustBadges = [
   { icon: <Shield size={20} />, text: "Fully Insured" },
-  { icon: <Award size={20} />, text: "40+ Years Experience" },
+  { icon: <Award size={20} />, text: "Family & Locally Owned" },
   { icon: <Clock size={20} />, text: "Fast Free Estimates" },
   { icon: <Users size={20} />, text: "1,000+ Customers Served" },
 ];
@@ -562,7 +562,7 @@ export default function Home() {
         <div className="container" style={{ position: "relative", zIndex: 10, paddingTop: "4rem", paddingBottom: "6rem" }}>
           <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
             <div>
-              <div className="section-label">Serving Denver, Boulder & Surrounding Areas — 40+ Years, 1,000+ Satisfied Clients</div>
+              <div className="section-label">Serving Denver, Boulder & Surrounding Areas — Family Owned & Fully Insured</div>
               <h1
                 style={{
                   fontSize: "3.5rem",
@@ -607,7 +607,7 @@ export default function Home() {
                   fontFamily: "Source Serif 4, serif",
                 }}
               >
-                Frameless shower doors that stay crystal clear. Energy-efficient windows that cut AC bills by 30%. Professional window tinting that blocks 99% of UV rays. Mile High Glass delivers luxury results without the luxury price tag.
+                Frameless shower doors that stay crystal clear. Foggy window glass replaced without paying for a whole new window. Professional window tinting that blocks 99% of UV rays. Mile High Glass delivers luxury results without the luxury price tag.
               </p>
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "2rem" }}>
@@ -766,7 +766,7 @@ export default function Home() {
                 fontFamily: "Source Serif 4, serif",
               }}
             >
-              Whether it's a master bath makeover, energy-efficient windows, or professional
+              Whether it's a master bath makeover, foggy glass replacement, or professional
               window film — we tailor every job to fit your layout, style, and budget.
             </p>
           </div>
@@ -1089,23 +1089,19 @@ export default function Home() {
             {[
               {
                 q: "How much do shower doors cost?",
-                a: "Frameless shower doors typically range from $2,500–$6,000 depending on size, glass type, and hardware. We provide a free, no-obligation estimate so you know exactly what to expect.",
+                a: "Every shower door is custom — price depends on size, glass type, and hardware. We quote in person so you know exactly what to expect, free and no obligation. Fair warning: we're not the cheapest, and that's the point.",
               },
               {
-                q: "How long does installation take?",
-                a: "Most shower door installations are completed in 5–7 days. Window replacement takes 7–10 days. We schedule around your timeline and minimize disruption.",
-              },
-              {
-                q: "How much can I save on my AC bills?",
-                a: "Energy-efficient windows typically reduce AC/heating costs by 20–30% annually. We provide a free energy audit and can show you projected savings before you decide.",
+                q: "How long does the process take?",
+                a: "Fast. We'll typically be out for an in-person quote within a few days of your call, and once you approve it, most installs happen the following week — about two weeks from first call to finished job.",
               },
               {
                 q: "Are you insured?",
                 a: "Yes. We carry comprehensive liability and workers' compensation insurance. Verification available upon request.",
               },
               {
-                q: "Do you offer financing?",
-                a: "Yes! We work with several financing partners offering flexible payment plans with competitive rates. Ask about options when we call with your estimate.",
+                q: "What if something's not right?",
+                a: "Simple: if we don't get it right the first time, we'll do it until it's right. We're family owned, locally operated, and our name is on every job.",
               },
             ].map((item, idx) => (
               <div
