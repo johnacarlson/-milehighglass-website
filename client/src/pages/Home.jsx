@@ -653,9 +653,9 @@ export default function Home() {
                 style={{
                   borderRadius: "0.125rem",
                   padding: "2rem",
-                  background: "rgba(26,23,20,0.55)",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
+                  background: "rgba(26,23,20,0.45)",
+                  backdropFilter: "blur(2px)",
+                  WebkitBackdropFilter: "blur(2px)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
                 }}
