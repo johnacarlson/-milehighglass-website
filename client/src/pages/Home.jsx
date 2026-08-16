@@ -65,13 +65,13 @@ const services = [
     label: "Window Tinting",
     icon: <Sun size={22} />,
     image: TINT_IMG,
-    headline: "Professional Window Tinting — Blocks 99% of UV",
+    headline: "Professional Window Tinting — Blocks Harmful UV",
     tagline: "Stay Cool. Protect Your Furniture. Keep Your Privacy.",
     description:
-      "Professional window film that rejects solar heat (lower AC costs), blocks 99% of UV rays (protects skin & furniture), and adds daytime privacy — all while keeping your crystal clear view. Zero peeling, zero bubbling, zero hassle.",
+      "Professional window film that rejects solar heat, blocks harmful UV rays (protects skin & furniture), and adds daytime privacy — all while keeping your crystal clear view. Zero peeling, zero bubbling, zero hassle.",
     features: [
       "Rejects solar heat — cooler rooms in summer",
-      "Blocks 99% of UV rays (protects furniture & skin)",
+      "Blocks harmful UV rays (protects furniture & skin)",
       "Daytime privacy without darkness",
       "Reduces glare on screens & surfaces",
       "Professional-grade film, expertly installed",
@@ -607,7 +607,7 @@ export default function Home() {
                   fontFamily: "Source Serif 4, serif",
                 }}
               >
-                Frameless shower doors that stay crystal clear. Foggy window glass replaced without paying for a whole new window. Professional window tinting that blocks 99% of UV rays. Mile High Glass delivers luxury results without the luxury price tag.
+                Frameless shower doors that stay crystal clear. Foggy window glass replaced without paying for a whole new window. Professional window tinting that blocks harmful UV rays. Mile High Glass delivers luxury results without the luxury price tag.
               </p>
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "2rem" }}>
@@ -653,7 +653,7 @@ export default function Home() {
                 style={{
                   borderRadius: "0.125rem",
                   padding: "2rem",
-                  background: "transparent",
+                  background: "rgba(20,18,14,0.3)",
                   border: "1.5px solid rgba(255,255,255,0.35)",
                 }}
               >
