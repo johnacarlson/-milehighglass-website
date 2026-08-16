@@ -51,11 +51,13 @@ router.post('/submit', submitLimiter, async (req, res) => {
 
     console.log(`[Lead] Created lead #${savedLead.id} from ${leadData.email}`);
 
-    // 2. Send email async (don't block response)
-    sendLeadEmail(savedLead)
+    // 2. Email must complete BEFORE the response — Vercel freezes the function
+    // once it responds, so fire-and-forget work silently never runs. Email
+    // failure is logged and never blocks the lead or the 200.
+    await sendLeadEmail(savedLead)
       .then((success) => {
         if (success) {
-          updateLeadEmailStatus(savedLead.id, true).catch((err) => {
+          return updateLeadEmailStatus(savedLead.id, true).catch((err) => {
             console.error(`[DB] Failed to update email status for lead ${savedLead.id}:`, err);
           });
         }
