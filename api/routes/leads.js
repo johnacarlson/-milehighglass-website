@@ -84,10 +84,13 @@ router.post('/submit', submitLimiter, async (req, res) => {
       console.error(`[DB] Persist failed for ${leadData.email} — continuing to email:`, err);
     }
 
-    // Fall back to the validated payload so the email body is identical whether
-    // or not the row was written. sendLeadEmail reads snake_case DB columns.
-    const emailPayload = savedLead || {
-      id: 'unsaved',
+    // Always built from the validated submission, never from the insert's return
+    // shape. Feeding the DB row straight to the template is what sent months of
+    // "New Lead: undefined undefined" notifications: insertLead returned only id
+    // and created_at, so every field the email needed was missing precisely when
+    // the write SUCCEEDED. sendLeadEmail reads snake_case DB columns.
+    const emailPayload = {
+      id: savedLead ? savedLead.id : 'unsaved',
       first_name: leadData.firstName,
       last_name: leadData.lastName,
       email: leadData.email,

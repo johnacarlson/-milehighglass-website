@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --watch api/index.js",
     "build": "echo 'No build step needed'",
-    "start": "node api/index.js"
+    "start": "node api/index.js",
+    "test": "node --test --experimental-test-module-mocks 'api/test/*.test.mjs'"
   },
   "keywords": [],
   "author": "",
