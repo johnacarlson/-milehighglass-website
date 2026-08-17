@@ -16,6 +16,12 @@ const PORT = process.env.PORT || 3001;
 // database outage is visible without having to read function logs.
 let dbReady = false;
 
+// Vercel terminates TLS at its edge and forwards the visitor address in
+// X-Forwarded-For. Without this, req.ip is the proxy for every request, so
+// express-rate-limit buckets ALL visitors together and starts rejecting real
+// leads after 5 submissions site-wide per 15 minutes. Trust exactly one hop.
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
