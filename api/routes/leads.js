@@ -43,32 +43,57 @@ router.post('/submit', submitLimiter, async (req, res) => {
 
     const leadData = validation.data;
 
-    // 1. Save to database
-    const savedLead = await insertLead({
-      ...leadData,
-      ipAddress,
-    });
+    // 1. Save to database. A failure here must NOT abort the submission — the
+    // email is what actually reaches a human, and a lead that only lands in the
+    // inbox beats a lead that is lost because Postgres was unreachable.
+    let savedLead = null;
+    try {
+      savedLead = await insertLead({ ...leadData, ipAddress });
+      console.log(`[Lead] Created lead #${savedLead.id} from ${leadData.email}`);
+    } catch (err) {
+      console.error(`[DB] Persist failed for ${leadData.email} — continuing to email:`, err);
+    }
 
-    console.log(`[Lead] Created lead #${savedLead.id} from ${leadData.email}`);
+    // Fall back to the validated payload so the email body is identical whether
+    // or not the row was written. sendLeadEmail reads snake_case DB columns.
+    const emailPayload = savedLead || {
+      id: 'unsaved',
+      first_name: leadData.firstName,
+      last_name: leadData.lastName,
+      email: leadData.email,
+      phone: leadData.phone,
+      zip_code: leadData.zipCode,
+      service: leadData.service,
+      message: leadData.message,
+    };
 
     // 2. Email must complete BEFORE the response — Vercel freezes the function
-    // once it responds, so fire-and-forget work silently never runs. Email
-    // failure is logged and never blocks the lead or the 200.
-    await sendLeadEmail(savedLead)
-      .then((success) => {
-        if (success) {
-          return updateLeadEmailStatus(savedLead.id, true).catch((err) => {
-            console.error(`[DB] Failed to update email status for lead ${savedLead.id}:`, err);
-          });
-        }
-      })
-      .catch((err) => {
-        console.error(`[Email] Error sending email for lead ${savedLead.id}:`, err);
+    // once it responds, so fire-and-forget work silently never runs.
+    let emailed = false;
+    try {
+      emailed = await sendLeadEmail(emailPayload);
+      if (emailed && savedLead) {
+        await updateLeadEmailStatus(savedLead.id, true).catch((err) => {
+          console.error(`[DB] Failed to update email status for lead ${savedLead.id}:`, err);
+        });
+      }
+    } catch (err) {
+      console.error(`[Email] Error sending email for ${leadData.email}:`, err);
+    }
+
+    // Only a genuine loss — neither stored nor delivered — is an error. Telling
+    // the visitor to call is better than a false "we got it".
+    if (!savedLead && !emailed) {
+      console.error(`[Lead] LOST: ${leadData.email} was neither saved nor emailed`);
+      return res.status(500).json({
+        success: false,
+        error: 'Server error processing submission',
       });
+    }
 
     return res.status(200).json({
       success: true,
-      leadId: savedLead.id,
+      leadId: savedLead ? savedLead.id : null,
       message: 'Lead submitted successfully',
     });
   } catch (err) {

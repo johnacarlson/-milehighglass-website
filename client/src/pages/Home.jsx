@@ -157,6 +157,7 @@ const trustBadges = [
 function QuoteForm({ dark = true }) {
   const [formData, setFormData] = useState({
     name: "",
+    phone: "",
     email: "",
     service: "",
   });
@@ -174,6 +175,7 @@ function QuoteForm({ dark = true }) {
         setSuccess(false);
         setFormData({
           name: "",
+          phone: "",
           email: "",
           service: "",
         });
@@ -197,6 +199,7 @@ function QuoteForm({ dark = true }) {
           firstName,
           lastName: restName.join(" ") || undefined,
           email: formData.email,
+          phone: formData.phone,
           service: formData.service || undefined,
         }
       );
@@ -211,6 +214,7 @@ function QuoteForm({ dark = true }) {
         }
         setFormData({
           name: "",
+          phone: "",
           email: "",
           service: "",
         });
@@ -258,6 +262,23 @@ function QuoteForm({ dark = true }) {
           value={formData.email}
           onChange={handleChange}
           placeholder="john@email.com"
+          className={inputClass}
+        />
+      </div>
+
+      <div>
+        <label className={labelClass} style={{ fontFamily: "Oswald, sans-serif", color: "white" }}>
+          Phone Number *
+        </label>
+        <input
+          name="phone"
+          type="tel"
+          required
+          inputMode="tel"
+          autoComplete="tel"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="(303) 555-0142"
           className={inputClass}
         />
       </div>

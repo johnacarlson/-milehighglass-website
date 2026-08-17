@@ -12,6 +12,10 @@ dotenv.config({ path: '.env.local' });
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Set once the schema has initialized successfully. Reported by /api/health so a
+// database outage is visible without having to read function logs.
+let dbReady = false;
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
@@ -40,7 +44,11 @@ app.use(
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'ok',
+    database: dbReady ? 'connected' : 'unavailable',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Routes
@@ -57,37 +65,44 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Server error' });
 });
 
-// Initialize and start
+// Initialize once per process.
+//
+// This must never call process.exit(). On Vercel the module is imported on every
+// cold start, so exiting on a failed dependency takes down *every* route —
+// including /api/health, which touches nothing. A database outage degrades lead
+// persistence only; the email path stays up and the lead still reaches the inbox.
 async function start() {
-  try {
-    // Database
-    const dbUrl = process.env.DATABASE_URL;
-    if (!dbUrl) {
-      throw new Error('DATABASE_URL is required in environment');
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl) {
+    console.error('[Startup] DATABASE_URL is not set — lead persistence disabled');
+  } else {
+    try {
+      console.log('[DB] Connecting to database...');
+      initDB(dbUrl);
+      await initializeSchema();
+      dbReady = true;
+    } catch (err) {
+      console.error('[Startup] Database unavailable — lead persistence disabled:', err.message);
     }
+  }
 
-    console.log('[DB] Connecting to database...');
-    initDB(dbUrl);
-    await initializeSchema();
+  // Email
+  const resendKey = process.env.RESEND_API_KEY;
+  if (resendKey) {
+    initEmail(resendKey);
+    console.log('[Email] Resend configured');
+  } else {
+    console.warn('[Email] ⚠️  Resend not configured — email delivery disabled');
+  }
 
-    // Email
-    const resendKey = process.env.RESEND_API_KEY;
-    if (resendKey) {
-      initEmail(resendKey);
-      console.log('[Email] Resend configured');
-    } else {
-      console.warn('[Email] ⚠️  Resend not configured — email delivery disabled');
-    }
-
-    // Server
+  // Bind a port only when run directly (local dev). Vercel invokes the exported
+  // app as a handler; calling listen() there serves no purpose.
+  if (!process.env.VERCEL) {
     app.listen(PORT, () => {
       console.log(`\n✓ Server running at http://localhost:${PORT}`);
       console.log(`✓ API endpoint: POST http://localhost:${PORT}/api/leads/submit`);
       console.log(`✓ Health check: http://localhost:${PORT}/api/health\n`);
     });
-  } catch (err) {
-    console.error('[Startup] Failed to start server:', err);
-    process.exit(1);
   }
 }
 
@@ -97,6 +112,9 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
-start();
+// A rejection here must not become an unhandled rejection that crashes the process.
+start().catch((err) => {
+  console.error('[Startup] Initialization error:', err);
+});
 
 export default app;
