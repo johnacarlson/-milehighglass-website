@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { insertLead, updateLeadEmailStatus } from '../db/schema.js';
 import { sendLeadEmail } from '../email.js';
 import { ensureInit } from '../init.js';
+import { sendLeadEvent } from '../meta-capi.js';
 
 const router = Router();
 
@@ -34,6 +35,9 @@ const leadSchema = z.object({
   zipCode: z.string().optional(),
   service: z.string().optional(),
   message: z.string().optional(),
+  // Shared with the browser pixel so Meta deduplicates the two Lead events into
+  // one. Optional: an older cached bundle omits it and must still submit.
+  eventId: z.string().max(64).optional(),
 });
 
 router.post('/submit', submitLimiter, async (req, res) => {
@@ -81,19 +85,67 @@ router.post('/submit', submitLimiter, async (req, res) => {
       message: leadData.message,
     };
 
-    // 2. Email must complete BEFORE the response — Vercel freezes the function
-    // once it responds, so fire-and-forget work silently never runs.
+    // 2 + 3. The email and the Meta CAPI event must both COMPLETE before the
+    // response — Vercel freezes the function the moment it responds, so anything
+    // still in flight silently never runs. Run them concurrently, never let
+    // either reject, and answer the visitor only once both have settled.
     let emailed = false;
-    try {
-      emailed = await sendLeadEmail(emailPayload);
-      if (emailed && savedLead) {
-        await updateLeadEmailStatus(savedLead.id, true).catch((err) => {
-          console.error(`[DB] Failed to update email status for lead ${savedLead.id}:`, err);
-        });
-      }
-    } catch (err) {
-      console.error(`[Email] Error sending email for ${leadData.email}:`, err);
+    let emailResult = 'not-run';
+    let capiResult = 'not-run';
+
+    const sideEffects = [
+      sendLeadEmail(emailPayload)
+        .then(async (success) => {
+          emailed = success;
+          emailResult = success ? 'sent' : 'send-returned-false';
+          if (success && savedLead) {
+            await updateLeadEmailStatus(savedLead.id, true).catch((err) => {
+              console.error(`[DB] Failed to update email status for lead ${savedLead.id}:`, err);
+            });
+          }
+        })
+        .catch((err) => {
+          emailResult = `threw: ${err?.message || err}`;
+          console.error(`[Email] Error sending email for ${leadData.email}:`, err);
+        }),
+    ];
+
+    // Server-side Lead event. Carries the same eventId the browser pixel fired
+    // with, so Meta collapses the pair into one conversion instead of counting
+    // it twice. Skipped when the client sent no id — an older cached bundle.
+    if (leadData.eventId) {
+      const cookies = Object.fromEntries(
+        (req.headers.cookie || '')
+          .split(';')
+          .map((c) => {
+            const i = c.indexOf('=');
+            return [c.slice(0, i).trim(), c.slice(i + 1).trim()];
+          })
+          .filter(([k]) => k)
+      );
+      sideEffects.push(
+        sendLeadEvent({
+          eventId: leadData.eventId,
+          phone: leadData.phone,
+          firstName: leadData.firstName,
+          email: leadData.email,
+          fbp: cookies._fbp,
+          fbc: cookies._fbc,
+          ipAddress,
+          userAgent: req.headers['user-agent'],
+          sourceUrl: req.headers.referer,
+        })
+          .then((sent) => {
+            capiResult = sent ? 'sent' : 'skipped-or-failed';
+          })
+          .catch((err) => {
+            capiResult = `threw: ${err?.message || err}`;
+            console.error('[CAPI] unexpected error:', err);
+          })
+      );
     }
+
+    await Promise.allSettled(sideEffects);
 
     // Only a genuine loss — neither stored nor delivered — is an error. Telling
     // the visitor to call is better than a false "we got it".
@@ -105,11 +157,25 @@ router.post('/submit', submitLimiter, async (req, res) => {
       });
     }
 
-    return res.status(200).json({
+    const body = {
       success: true,
       leadId: savedLead ? savedLead.id : null,
       message: 'Lead submitted successfully',
-    });
+    };
+
+    // Live verification without log spelunking:
+    //   curl -H 'x-mhg-debug: 1' -X POST ... | jq .debug
+    if (req.headers['x-mhg-debug'] === '1') {
+      body.debug = {
+        savedToDatabase: Boolean(savedLead),
+        emailResult,
+        capiResult,
+        resendConfigured: Boolean(process.env.RESEND_API_KEY),
+        capiConfigured: Boolean(process.env.META_PIXEL_ID && process.env.META_CAPI_TOKEN),
+      };
+    }
+
+    return res.status(200).json(body);
   } catch (err) {
     console.error('[API] Lead submission error:', err);
     return res.status(500).json({
