@@ -61,6 +61,18 @@ router.post('/submit', submitLimiter, async (req, res) => {
 
     const leadData = validation.data;
 
+    // TEST MODE — type TEST as the first name.
+    //
+    // Exercises the real pipeline (database write, email send, status update) but
+    // routes the notification to TEST_LEAD_EMAIL instead of the client's inbox, and
+    // skips the Meta conversion event entirely. Every test lead before this one
+    // emailed Garrett's team AND fired a real Lead conversion, which both looks
+    // sloppy to the client and poisons the optimization data we then try to read.
+    const isTest = /^test\b/i.test(String(leadData.firstName || '').trim());
+    if (isTest) {
+      console.log(`[Lead] TEST MODE — notification diverted, Meta event suppressed`);
+    }
+
     // 1. Save to database. A failure here must NOT abort the submission — the
     // email is what actually reaches a human, and a lead that only lands in the
     // inbox beats a lead that is lost because Postgres was unreachable.
@@ -94,7 +106,7 @@ router.post('/submit', submitLimiter, async (req, res) => {
     let capiResult = 'not-run';
 
     const sideEffects = [
-      sendLeadEmail(emailPayload)
+      sendLeadEmail(emailPayload, { testMode: isTest })
         .then(async (success) => {
           emailed = success;
           emailResult = success ? 'sent' : 'send-returned-false';
@@ -113,7 +125,7 @@ router.post('/submit', submitLimiter, async (req, res) => {
     // Server-side Lead event. Carries the same eventId the browser pixel fired
     // with, so Meta collapses the pair into one conversion instead of counting
     // it twice. Skipped when the client sent no id — an older cached bundle.
-    if (leadData.eventId) {
+    if (leadData.eventId && !isTest) {
       const cookies = Object.fromEntries(
         (req.headers.cookie || '')
           .split(';')

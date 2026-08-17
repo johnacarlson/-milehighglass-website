@@ -52,6 +52,18 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
+// Arrival beacon. Page views are served by the CDN and never touch this function,
+// so without this there is no server-side record that anyone visited at all.
+// Logs only — no database write, no PII, nothing to clean up later.
+app.post('/api/pageview', (req, res) => {
+  const { path: p, referrer, fbclid, utmSource, utmCampaign } = req.body || {};
+  console.log(
+    `[Visit] path=${p || '/'} fromAd=${fbclid ? 'YES' : 'no'} ` +
+      `utm_source=${utmSource || '-'} utm_campaign=${utmCampaign || '-'} ref=${referrer || 'direct'}`
+  );
+  res.status(204).end();
+});
+
 // Routes
 app.use('/api/leads', leadsRouter);
 

@@ -217,7 +217,10 @@ function QuoteForm({ dark = true }) {
 
       if (response.data.success) {
         setSuccess(true);
-        if (window.fbq) {
+        // Suppress the pixel for test submissions (first name starting with
+        // "TEST"), so internal testing never lands in Meta's conversion data.
+        const isTestSubmission = /^test\b/i.test(trimmedName);
+        if (window.fbq && !isTestSubmission) {
           // The eventID here must match the one sent to the server, or Meta
           // counts this lead twice.
           window.fbq('track', 'Lead', {

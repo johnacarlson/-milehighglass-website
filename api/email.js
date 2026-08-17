@@ -29,11 +29,18 @@ function getServiceLabel(service) {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-export async function sendLeadEmail(leadData) {
+export async function sendLeadEmail(leadData, options = {}) {
   if (!resend) {
     console.warn('[Email] Resend not configured — skipping email');
     return false;
   }
+
+  // In test mode the notification goes to TEST_LEAD_EMAIL instead of the client's
+  // inbox, so the pipeline can be exercised without making the client think a real
+  // customer came in.
+  const recipient = options.testMode
+    ? process.env.TEST_LEAD_EMAIL || 'john.algot.carlson@gmail.com'
+    : process.env.LEAD_EMAIL || 'Admin@MileHighGlassDenver.com';
 
   const {
     id: leadId,
@@ -98,13 +105,15 @@ export async function sendLeadEmail(leadData) {
   try {
     const response = await resend.emails.send({
       from: 'noreply@milehighglassdenver.co',
-      to: process.env.LEAD_EMAIL || 'Admin@MileHighGlassDenver.com',
+      to: recipient,
       replyTo: email,
-      subject: `New Lead: ${firstName} ${lastName} — ${serviceLabel}`,
+      subject: options.testMode
+        ? `[TEST — not a real lead] ${firstName} ${lastName} — ${serviceLabel}`
+        : `New Lead: ${firstName} ${lastName} — ${serviceLabel}`,
       html: htmlBody,
     });
 
-    console.log(`[Email] Lead ${leadId} sent to ${process.env.LEAD_EMAIL || 'Admin@MileHighGlassDenver.com'}`);
+    console.log(`[Email] Lead ${leadId} sent to ${recipient}${options.testMode ? ' (TEST MODE)' : ''}`);
     return true;
   } catch (err) {
     console.error(`[Email] Failed to send lead ${leadId}:`, err);
