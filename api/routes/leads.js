@@ -3,6 +3,7 @@ import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import { insertLead, updateLeadEmailStatus } from '../db/schema.js';
 import { sendLeadEmail } from '../email.js';
+import { ensureInit } from '../init.js';
 
 const router = Router();
 
@@ -28,6 +29,10 @@ const leadSchema = z.object({
 
 router.post('/submit', submitLimiter, async (req, res) => {
   try {
+    // Must complete before the first insert. On a cold start the pool does not
+    // exist yet, and skipping this would drop the lead to email-only.
+    await ensureInit();
+
     const ipAddress =
       req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
       req.ip ||
