@@ -49,7 +49,7 @@ export async function insertLead(leadData) {
   const result = await query(
     `INSERT INTO leads (first_name, last_name, email, phone, zip_code, service, message, ip_address)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-     RETURNING id, created_at`,
+     RETURNING *`,
     [firstName, lastName, email, phone, zipCode || null, service || null, message || null, ipAddress || null]
   );
 

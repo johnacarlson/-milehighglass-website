@@ -113,6 +113,14 @@ export async function sendLeadEmail(leadData, options = {}) {
       html: htmlBody,
     });
 
+    // Resend resolves with { data: null, error: {...} } on rejection instead of
+    // throwing, so a bare try/catch reports a refused send as a success — and the
+    // caller then writes email_sent = true for a lead nobody was told about.
+    if (response?.error) {
+      console.error(`[Email] Resend rejected lead ${leadId}:`, JSON.stringify(response.error));
+      return false;
+    }
+
     console.log(`[Email] Lead ${leadId} sent to ${recipient}${options.testMode ? ' (TEST MODE)' : ''}`);
     return true;
   } catch (err) {
