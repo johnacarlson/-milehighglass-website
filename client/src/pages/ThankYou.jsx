@@ -91,7 +91,7 @@ export default function ThankYou() {
               fontFamily: "Source Serif 4, serif",
             }}
           >
-            We appreciate your interest. Your quote request has been received, and our team will respond within 24 hours with a custom estimate.
+            We appreciate your interest. Your quote request has been received, and our team will be in touch with a custom estimate.
           </p>
 
           {/* Secondary Message */}

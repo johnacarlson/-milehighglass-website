@@ -392,7 +392,7 @@ function QuoteForm({ dark = true }) {
       >
         ✓ 100% Free Estimate — No Obligation<br/>
         ✓ Your info is secure & never shared<br/>
-        ✓ We'll reach out within 24 hours
+        ✓ Family owned & locally operated
       </p>
 
       {success && (
@@ -439,7 +439,7 @@ function QuoteForm({ dark = true }) {
               marginBottom: "2rem",
               fontFamily: "Source Serif 4, serif",
             }}>
-              We've received your inquiry and will respond within 24 hours with a custom estimate. Our team is excited to help transform your space.
+              We've received your inquiry and will be in touch with a custom estimate. Our team is excited to help transform your space.
             </p>
             <button
               onClick={() => {
@@ -684,7 +684,7 @@ export default function Home() {
                     fontFamily: "Source Serif 4, serif",
                   }}
                 >
-                  Trusted by thousands of Colorado homeowners
+                  Trusted by Colorado homeowners across Denver &amp; Boulder
                 </span>
               </div>
             </div>
@@ -718,7 +718,7 @@ export default function Home() {
                       fontFamily: "Source Serif 4, serif",
                     }}
                   >
-                    We'll respond within 24 hours with a custom estimate.
+                    Tell us what you need and we'll put together a custom estimate.
                   </p>
                 </div>
                 <QuoteForm dark={true} />
