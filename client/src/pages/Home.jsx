@@ -223,7 +223,14 @@ function QuoteForm({ dark = true }) {
         }, 650);
       }
     } catch (err) {
-      setError("Something went wrong. Please call us at (303) 455-9552.");
+      // A 429 is not a failure the visitor can fix by retrying, and telling them
+      // "something went wrong" invites exactly that. Say what happened.
+      const status = err?.response?.status;
+      setError(
+        status === 429
+          ? "Too many requests from your network right now. Please call us at (303) 455-9552."
+          : "Something went wrong. Please call us at (303) 455-9552."
+      );
       console.error("Lead submission error:", err);
     } finally {
       setSubmitting(false);

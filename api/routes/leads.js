@@ -7,11 +7,20 @@ import { ensureInit } from '../init.js';
 
 const router = Router();
 
-// Rate limit: 5 submissions per IP per 15 minutes
+// Rate limit: 20 submissions per IP per 15 minutes.
+//
+// This is spam protection, not a quota. 5 was low enough to lock out a shared
+// office or apartment NAT, where many legitimate prospects share one address —
+// and it counted rejected attempts, so a visitor who mistyped their email four
+// times was locked out before submitting once. Failed requests no longer count.
 const submitLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: { success: false, error: 'Too many submissions. Please try again later.' },
+  max: 20,
+  message: {
+    success: false,
+    error: 'Too many submissions from your network. Please call us at (303) 455-9552.',
+  },
+  skipFailedRequests: true,
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => process.env.NODE_ENV === 'development',
