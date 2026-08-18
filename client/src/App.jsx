@@ -5,10 +5,6 @@ import ThankYou from './pages/ThankYou'
 
 export default function App() {
     useEffect(() => {
-          if (window.fbq) {
-                  window.fbq('track', 'PageView');
-          }
-
           // Server-side arrival beacon.
           //
           // Vercel only logs /api/* calls — page views are served by the CDN and are

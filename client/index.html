@@ -18,12 +18,14 @@
         fbq('init', '1924480254839146');
         fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-                src="https://www.facebook.com/tr?id=1924480254839146&ev=PageView&noscript=1"
-                /></noscript>
-  <!-- End Meta Pixel Code -->
+    <!-- End Meta Pixel Code -->
   </head>
   <body>
+    <!-- Meta Pixel fallback for browsers with JavaScript disabled -->
+    <noscript><img height="1" width="1" style="display:none"
+                src="https://www.facebook.com/tr?id=1924480254839146&ev=PageView&noscript=1"
+                alt=""
+                /></noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

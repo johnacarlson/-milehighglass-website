@@ -12,8 +12,8 @@ export function normalizePhone(phone) {
 export function buildLeadEventPayload({
   eventId, phone, firstName, email, fbp, fbc, ipAddress, userAgent, sourceUrl, testEventCode,
 }) {
-  // Every identifier is SHA-256 hashed before it leaves this server — Meta
-  // never receives a raw phone number, name, or email address.
+  // Meta requires normalized contact identifiers to be SHA-256 hashed. Browser
+  // cookies, IP address, and user agent remain unhashed matching signals.
   const user_data = {};
   if (phone) user_data.ph = [sha256(normalizePhone(phone))];
   if (firstName) user_data.fn = [sha256(String(firstName).trim().toLowerCase())];
@@ -56,7 +56,7 @@ export async function sendLeadEvent(args) {
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: AbortSignal.timeout(3000) }
     );
     const json = await res.json();
-    if (!res.ok) {
+    if (!res.ok || json?.events_received !== 1) {
       console.error('[CAPI] API error:', JSON.stringify(json));
       return false;
     }
