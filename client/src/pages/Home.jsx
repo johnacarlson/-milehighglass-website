@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Phone,
   Star,
@@ -165,16 +165,6 @@ function QuoteForm({ dark = true }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // One id per form, shared by the browser pixel and the server-side event so
-  // Meta deduplicates them into a single Lead instead of counting two.
-  const eventId = useMemo(
-    () =>
-      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
-        ? crypto.randomUUID()
-        : `evt-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-    []
-  );
-
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -211,23 +201,11 @@ function QuoteForm({ dark = true }) {
           email: formData.email,
           phone: formData.phone,
           service: formData.service || undefined,
-          eventId,
         }
       );
 
       if (response.data.success) {
         setSuccess(true);
-        // Suppress the pixel for test submissions (first name starting with
-        // "TEST"), so internal testing never lands in Meta's conversion data.
-        const isTestSubmission = /^test\b/i.test(trimmedName);
-        if (window.fbq && !isTestSubmission) {
-          // The eventID here must match the one sent to the server, or Meta
-          // counts this lead twice.
-          window.fbq('track', 'Lead', {
-            value: 0.00,
-            currency: 'USD'
-          }, { eventID: eventId });
-        }
         setFormData({
           name: "",
           phone: "",

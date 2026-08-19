@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { insertLead, updateLeadEmailStatus } from '../db/schema.js';
 import { sendLeadEmail } from '../email.js';
 import { ensureInit } from '../init.js';
-import { sendLeadEvent } from '../meta-capi.js';
 
 const router = Router();
 
@@ -35,9 +34,6 @@ const leadSchema = z.object({
   zipCode: z.string().optional(),
   service: z.string().optional(),
   message: z.string().optional(),
-  // Shared with the browser pixel so Meta deduplicates the two Lead events into
-  // one. Optional: an older cached bundle omits it and must still submit.
-  eventId: z.string().max(64).optional(),
 });
 
 router.post('/submit', submitLimiter, async (req, res) => {
@@ -64,13 +60,10 @@ router.post('/submit', submitLimiter, async (req, res) => {
     // TEST MODE — type TEST as the first name.
     //
     // Exercises the real pipeline (database write, email send, status update) but
-    // routes the notification to TEST_LEAD_EMAIL instead of the client's inbox, and
-    // skips the Meta conversion event entirely. Every test lead before this one
-    // emailed Garrett's team AND fired a real Lead conversion, which both looks
-    // sloppy to the client and poisons the optimization data we then try to read.
+    // routes the notification to TEST_LEAD_EMAIL instead of the client's inbox.
     const isTest = /^test\b/i.test(String(leadData.firstName || '').trim());
     if (isTest) {
-      console.log(`[Lead] TEST MODE — notification diverted, Meta event suppressed`);
+      console.log(`[Lead] TEST MODE — notification diverted`);
     }
 
     // 1. Save to database. A failure here must NOT abort the submission — the
@@ -100,15 +93,12 @@ router.post('/submit', submitLimiter, async (req, res) => {
       message: leadData.message,
     };
 
-    // 2 + 3. The email and the Meta CAPI event must both COMPLETE before the
-    // response — Vercel freezes the function the moment it responds, so anything
-    // still in flight silently never runs. Run them concurrently, never let
-    // either reject, and answer the visitor only once both have settled.
+    // 2. The email must complete before the response — Vercel freezes the
+    // function the moment it responds, so work still in flight may never finish.
     let emailed = false;
     let emailResult = 'not-run';
-    let capiResult = 'not-run';
 
-    const sideEffects = [
+    const emailTasks = [
       sendLeadEmail(emailPayload, { testMode: isTest })
         .then(async (success) => {
           emailed = success;
@@ -125,42 +115,7 @@ router.post('/submit', submitLimiter, async (req, res) => {
         }),
     ];
 
-    // Server-side Lead event. Carries the same eventId the browser pixel fired
-    // with, so Meta collapses the pair into one conversion instead of counting
-    // it twice. Skipped when the client sent no id — an older cached bundle.
-    if (leadData.eventId && !isTest) {
-      const cookies = Object.fromEntries(
-        (req.headers.cookie || '')
-          .split(';')
-          .map((c) => {
-            const i = c.indexOf('=');
-            return [c.slice(0, i).trim(), c.slice(i + 1).trim()];
-          })
-          .filter(([k]) => k)
-      );
-      sideEffects.push(
-        sendLeadEvent({
-          eventId: leadData.eventId,
-          phone: leadData.phone,
-          firstName: leadData.firstName,
-          email: leadData.email,
-          fbp: cookies._fbp,
-          fbc: cookies._fbc,
-          ipAddress,
-          userAgent: req.headers['user-agent'],
-          sourceUrl: req.headers.referer,
-        })
-          .then((sent) => {
-            capiResult = sent ? 'sent' : 'skipped-or-failed';
-          })
-          .catch((err) => {
-            capiResult = `threw: ${err?.message || err}`;
-            console.error('[CAPI] unexpected error:', err);
-          })
-      );
-    }
-
-    await Promise.allSettled(sideEffects);
+    await Promise.allSettled(emailTasks);
 
     // Only a genuine loss — neither stored nor delivered — is an error. Telling
     // the visitor to call is better than a false "we got it".
@@ -184,9 +139,7 @@ router.post('/submit', submitLimiter, async (req, res) => {
       body.debug = {
         savedToDatabase: Boolean(savedLead),
         emailResult,
-        capiResult,
         resendConfigured: Boolean(process.env.RESEND_API_KEY),
-        capiConfigured: Boolean(process.env.META_PIXEL_ID && process.env.META_CAPI_TOKEN),
       };
     }
 

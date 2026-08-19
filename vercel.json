@@ -1,7 +1,15 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://www.milehighglassdenver.com",
+      "statusCode": 301
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

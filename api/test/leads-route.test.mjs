@@ -42,17 +42,6 @@ mock.module('../init.js', {
   namedExports: { ensureInit: async () => {}, isDbReady: () => true },
 });
 
-const capiEvents = [];
-
-mock.module('../meta-capi.js', {
-  namedExports: {
-    sendLeadEvent: async (args) => {
-      capiEvents.push(args);
-      return true;
-    },
-  },
-});
-
 const { default: leadsRouter } = await import('../routes/leads.js');
 
 const app = express();
@@ -81,14 +70,11 @@ const RON = {
   zipCode: '80202',
   service: 'window-replacement',
   message: 'Foggy glass in two windows.',
-  // Shared with the browser pixel so Meta collapses the two Lead events into one.
-  eventId: 'ffffffff-1111-2222-3333-444444444444',
 };
 
 async function submit(body) {
   sentEmails.length = 0;
   statusUpdates.length = 0;
-  capiEvents.length = 0;
   const res = await fetch(`${baseUrl}/api/leads/submit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -158,30 +144,10 @@ test('a database outage still delivers a legible lead by email', async () => {
   assert.deepEqual(statusUpdates, [], 'nothing to update when no row exists');
 });
 
-test('a real lead fires one deduplicated Meta conversion', async () => {
-  insertBehaviour = () => ({ id: 67, created_at: new Date() });
-
-  await submit(RON);
-
-  assert.equal(capiEvents.length, 1);
-  assert.equal(
-    capiEvents[0].eventId,
-    RON.eventId,
-    'the server event must carry the browser pixel eventId or Meta double-counts the lead'
-  );
-  assert.equal(capiEvents[0].email, RON.email);
-  assert.equal(capiEvents[0].phone, RON.phone);
-});
-
-test('a TEST lead is diverted and never counted as a conversion', async () => {
+test('a TEST lead is diverted to the test inbox', async () => {
   insertBehaviour = () => ({ id: 66, created_at: new Date() });
 
   await submit({ ...RON, firstName: 'TEST Ron' });
 
   assert.equal(sentEmails[0].options.testMode, true);
-  assert.deepEqual(
-    capiEvents,
-    [],
-    'a test submission must not fire a Lead event — it poisons the optimisation data'
-  );
 });
